@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Update Patient Visits {% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<head>
+    <style>
+        table, th, td {
+          border-collapse: collapse;
+          border: 1px solid black;
+          padding: 5px;
+          background-color: white;
+        }
+
+        tbody tr td {
+          height: 5px;
+          overflow: hidden;
+          white-space: nowrap;
+          table-layout: fixed;
+        }
+
+        p#ptIsAdded {
+          display: inline-block;
+          position: relative;
+          left: -330px;
+          top: 25px;
+          background-color: white;
+          padding-left: 5px;
+          padding-right: 5px;
+          color: red;
+        }
+    </style>
+    <script>
+        function updateStart() {
+          document.getElementById('fromDate').value = document.getElementById('startDate').value;
+        }
+
+        function updateEnd() {
+          document.getElementById('toDate').value = document.getElementById('endDate').value;
+        }
+    </script>
+</head>
+<section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+        <h1 style="padding-bottom:10px;display:inline-block;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clinic's Name&nbsp;&nbsp;&nbsp;</h1>
+
+        <fieldset style="background-color:white;display:inline-block;">
+
+        <form method="POST" action="" style="float:left;display:inline-block;">
+            <div>
+                <nobr>
+                    Visit Date Between
+                    <div id="flight">
+                      <input type="date" name="arrival" onchange="updateStart()" id="startDate"/>
+                    and
+                      <input type="date" name="departure" data-value="7" onchange="updateEnd()" id="endDate"/>
+                    </div>
+                </nobr>
+            </div>
+            <br>
+            <div class="container">
+                {{ render_field(form.searchBy) }} {{ render_field(form.searchFor) }}<input type="submit" value="Search">
+            </div>
+            <div style="display:none;">
+                {{ render_field(form.fromDate) }}
+                {{ render_field(form.toDate) }}
+            </div>
+        </form>
+
+        </fieldset>
+        {% if added == 1 %}
+        <p id="ptIsAdded">Patient <b>{{pt}}</b> is added</p>
+        {% endif %}
+
+    <br>
+    <div>
+        <table style="margin-top:10px;table-layout:fixed;width:90%;text-align:center;margin-left:auto;margin-right:auto;">
+            <thead style="background-color:#dedede;">
+            <tr>
+                <th style="width:100px;">Visit Date</th>
+                <th>Visit No</th>
+                <th style="width:100px;">Type</th>
+                <th>Patient Name</th>
+                <th style="width:100px;">NRIC</th>
+                <th style="width:70px;">Total Fee</th>
+                <th style="width:50px;">MC Days</th>
+                <th>Remarks</th>
+            </tr>
+            </thead>
+            {% if added == 1 %}
+            <tbody>
+            <tr>
+                <td>{{ visit.get_visit_date() }}</td>
+                <td>{{ visit.get_visit_num() }}</td>
+                <td>{{ visit.get_charge_type() }}</td>
+                <td><a href="/updateVisit/{{ visit.get_nric() }}">{{ visit.get_fullname() }}</a></td>
+                <td>{{ visit.get_nric() }}</td>
+                <td>{{ visit.get_total_fee() }}</td>
+                <td>{{ visit.get_mc_day() }}</td>
+                <td>{{ visit.get_remarks() }}</td>
+            </tr>
+            </tbody>
+            {% endif %}
+        </table>
+    </div>
+
+    </div>
+</section>
+{% endblock %}

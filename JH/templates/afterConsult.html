@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Pt Side - After Consultation{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<style>
+    table, td, th {
+      border: 1px solid black;
+    }
+</style>
+
+
+<section style="height:auto;" id="hero" class="d-flex align-items-center">
+    <div>
+        <fieldset style="background-color:white;margin-left:auto;margin-right:auto;width:60%;">
+            {% if booking == 'error' %}
+            <div>
+                <h1 style="text-align:center;font-size:100px;">Error Retrieving Booking Data</h1>
+                <a href="/" style="text-align:center;"><button>Return</button></a>
+            </div>
+            {% else %}
+            {% for booking in ptBookings %}
+                {% if booking == session %}
+                <div>
+                    <h1>{{ptBookings[booking].get_clinic()}}</h1>
+                    <h2 style="text-align:center;">Consultation Invoice</h2>
+
+                    <span>Patient's Info</span>
+                    <fieldset>
+                        <table style="text-align:left;">
+                            <tr>
+                                <th>Name:</th>
+                                <td colspan="2">{{ptBookings[booking].get_fullname()}}</td>
+                                <th>Invoice No:</th>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th>NRIC:</th>
+                                <td colspan="2">{{ptBookings[booking].get_nric()}}</td>
+                                <th>Visit No:</th>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th>Age:</th>
+                                <td colspan="2"></td>
+                                <th>Date of Consult</th>
+                                <td colspan="2">{{ptBookings[booking].get_date()}}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone No:</th>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td colspan="2"></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+
+                    <table>
+                        <thead>
+                            <th colspan="2">Description</th>
+                            <th>Total Cost</th>
+                            <th>Claimed Amount</th>
+                        </thead>
+                        <tr></tr>
+                    </table>
+
+                </div>
+                {% endif %}
+            {% endfor %}
+            {% endif %}
+        </fieldset>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Update Patient Visits {% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<head>
+    <style>
+        table, th, td {
+          border-collapse: collapse;
+          border: 1px solid black;
+          padding: 5px;
+          background-color: white;
+        }
+
+        tbody tr td {
+          height: 5px;
+          overflow: hidden;
+          white-space: nowrap;
+          table-layout: fixed;
+        }
+    </style>
+    <script>
+        function updateStart() {
+          document.getElementById('fromDate').value = document.getElementById('startDate').value;
+        }
+
+        function updateEnd() {
+          document.getElementById('toDate').value = document.getElementById('endDate').value;
+        }
+    </script>
+</head>
+<section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+
+        <h1 style="padding-bottom:10px;display:inline-block;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clinic's Name&nbsp;&nbsp;&nbsp;</h1>
+
+        <fieldset style="background-color:white;display:inline-block;">
+
+            <form method="POST" action="" style="float:left;display:inline-block;">
+                <div>
+                    <nobr>
+                        Visit Date Between
+                        <div id="flight">
+                          <input type="date" name="startDate" onchange="updateStart()" id="startDate"/>
+                        and
+                          <input type="date" name="endDate" data-value="7" onchange="updateEnd()" id="endDate"/>
+                        </div>
+                    </nobr>
+                </div>
+                <br>
+                <div class="container">
+                    {{ render_field(form.searchBy) }} {{ render_field(form.searchFor) }}<button type="submit" value="search">Search</button>
+                </div>
+                <div style="display:none;">
+                    {{ render_field(form.fromDate) }}
+                    {{ render_field(form.toDate) }}
+                </div>
+            </form>
+
+        </fieldset>
+
+    <br>
+    <div>
+        <table style="margin-top:10px;table-layout:fixed;width:90%;text-align:center;margin-left:auto;margin-right:auto;">
+            <thead style="background-color:#dedede;">
+            <tr>
+                <th style="width:100px;">Visit Date</th>
+                <th style="width:200px;">Visit No</th>
+                <th style="width:100px;">Type</th>
+                <th style="width:300px;">Patient Name</th>
+                <th style="width:100px;">NRIC</th>
+                <th style="width:70px;">Total Fee</th>
+                <th style="width:50px;">MC Days</th>
+                <th style="width:300px;">Remarks</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for pt in pt_visits %}
+                <tr>
+                    <td>{{ pt_visits[pt].get_visit_date() }}</td>
+                    <td>{{ pt_visits[pt].get_visit_num() }}</td>
+                    <td>{{ pt_visits[pt].get_charge_type() }}</td>
+                    <td><a href="/updateVisit/{{ pt }}">{{ pt_visits[pt].get_fullname() }}</a></td>
+                    <td>{{ pt_visits[pt].get_nric() }}</td>
+                    <td>{{ pt_visits[pt].get_total_fee() }}</td>
+                    <td>{{ pt_visits[pt].get_mc_day() }}</td>
+                    <td>{{ pt_visits[pt].get_remarks() }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    </div>
+</section>
+{% endblock %}

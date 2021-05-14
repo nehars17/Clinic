@@ -1,0 +1,46 @@
+{% extends "publicbase.html" %}
+{% block title %}Expand Consultation History{% endblock %}
+
+{% block content %}
+<section>
+<h1 class="display-4">Retrieve Consultation History</h1>
+    <div>
+<p>
+            Name: {{ user.get_name() }} <br>
+            NRIC: {{ user.get_nric() }} <br><br>
+
+
+            Consultation Type: Physical <br>
+            Consultation Date: {{ appointment.get_date_of_arrival() }} <br>
+            Consultation Time: {{ appointment.get_time() }} <br>
+            Notes: {{ appointment.get_message() }} <br><br>
+
+
+            {% for bookings in bookings_list %}
+            Consultation Type: Online <br>
+            Consultation Date: {{ bookings.get_date() }} <br>
+            Consultation Time: {{ bookings.get_timing() }} <br>
+            Notes: {{ bookings.get_notes() }} <br><br>
+            {% endfor %}
+
+        </p>
+
+    </div>
+    <div>
+    <h2>Medical Certificate</h2>
+    {% for user in user_list %}
+    <p>
+        {{ user.get_name() }}, {{ user.get_nric() }} <br>
+        {% endfor %}
+        {% for medcert in medcert_list %}
+        is unfit for duty from {{ medcert.get_startDate() }} to {{ medcert.get_endDate() }}
+        <br><br>
+
+        Clinic 24/365
+        {% endfor%}
+
+         </p>
+
+</div>
+</section>
+{% endblock %}

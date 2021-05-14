@@ -1,0 +1,78 @@
+
+{% extends "base.html" %}
+{% block title %}Clinic 24/365 - Retrieve Appointments {% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<script>
+
+
+ function validateForm(){
+     alert('Submitted Successfully');
+}
+
+ </script>
+<h1 class="display-4">Retrieve Users</h1>
+
+<div>
+  {% if count == 0 %}
+  <p>There are no patients.</p>
+  {% elif count == 1 %}
+  <p>There is 1 patient.</p>
+  {% else %}
+  <p>There are {{ count }} patients.</p>
+  {% endif %}
+</div>
+<div>
+   <form method="POST" action="" >
+       <p>please tick all checkboxes and click submit after completing all appointments</p>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Check</th>
+        <th>Name</th>
+        <th>Nric</th>
+        <th>Time</th>
+        <th>Purpose</th>
+        <th>Message</th>
+
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+
+    {% for patient in patient_list %}
+      <tr>
+       <td>
+           {% for user in user_list %}
+           <input type="checkbox" required></td>
+
+
+        <td><a href="/Patient_Profile/{{patient_dict.index(patient)}}">{{ user.get_name() }}</a></td>
+        <td>{{ user.get_nric() }}</td>
+          {% endfor %}
+        <td>{{ patient.get_time() }}</td>
+        {% if patient.get_purpose() == 'M' %}
+        <td>Medical Test/Examination</td>
+        {% elif patient.get_purpose() == 'D' %}
+        <td>Doctor's Consultation</td>
+        {% elif patient.get_purpose() == 'C' %}
+        <td>Collection of Documents</td>
+        {% endif %}
+        <td>{{ patient.get_message() }}</td>
+
+
+
+
+      </tr>
+
+    {% endfor %}
+    </tbody>
+  </table>
+
+       <input type="submit" value="Submit" onclick="validateForm()" class="btn btn-primary"/>
+      </form>
+  </div>
+
+{% endblock %}

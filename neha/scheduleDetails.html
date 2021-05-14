@@ -1,0 +1,39 @@
+{% extends "clinicRbase.html" %}
+{% block title %}Clinic 24/365 - Patient's Profile{% endblock %}
+{% block content %}
+<section class="u-align-center-md u-align-center-sm u-align-center-xs u-clearfix u-section-1" id="carousel_c624">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-list u-repeater u-list-1">
+          <div class="u-align-left u-container-style u-list-item u-repeater-item u-white u-list-item-1">
+            <div class="u-container-layout u-similar-container u-container-layout-1">
+              <h4 class="u-text u-text-1">Profile</h4>
+              <p class="u-text u-text-2" spellcheck="false"><b>Name:</b> {{schedule_details[1].get_name()}}<br><b>NRIC:&nbsp;</b>{{schedule_details[1].get_nric()}}<br><b>Gender:&nbsp;</b>{{schedule_details[1].get_gender()}}<br><b>Age:</b> 21<br><b>Date of Birth: </b>08/07/1999<br><b>Race:
+              </b>Eurasian&nbsp;<br><b>Address:</b> {{schedule_details[1].get_address()}}<br>
+                <br>
+
+              </p>
+
+            </div>
+          </div>
+          <div class="u-align-left u-container-style u-list-item u-repeater-item u-video-cover u-white u-list-item-2">
+            <div class="u-container-layout u-similar-container u-container-layout-2">
+              <h4 class="u-text u-text-3">Purpose:</h4>
+                 {% if schedule_details[0].get_purpose() == 'M' %}
+              <p class="u-text u-text-4">Medical Test/Examination</p>
+        {% elif schedule_details[0].get_purpose() == 'D' %}
+             <p class="u-text u-text-4">Consultation</p>
+        {% elif schedule_details[0].get_purpose() == 'C' %}
+         <p class="u-text u-text-4">Collection of Documents</p>
+        {% endif %}
+              <br>
+              <h4 class="u-text u-text-3">Condition & Symptoms:</h4>
+              <p class="u-text u-text-4">{{schedule_details[0].get_message()}}</p>
+              <br>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+{% endblock %}

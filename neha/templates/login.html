@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Login page{% endblock %}
+
+
+
+{% block content %}
+<div style="height: 40px"></div>
+<section class = 'login'>
+  <div class = 'public'>
+    <h1 class = 'heading'>For Public</h1>
+    <br>
+    <div class = 'form'>
+      <input type = 'text' id = 'nric' name = 'nric' required placeholder="NRIC">
+      <input type = 'password' id = 'public-password' name = 'password' required placeholder="Password">
+    </div>
+  </div>
+  <div class = 'clinic'>
+    <h1 class = 'heading'>For Clinic</h1>
+    <br>
+    <div class = 'form'>
+      <input type = 'text' id = 'clinicid' name = 'clinicid' required placeholder="Clinic ID">
+      <input type = 'password' id = 'clinic-password' name = 'password' required placeholder="Password">
+    </div>
+  </div>
+</section>
+
+{% endblock %}

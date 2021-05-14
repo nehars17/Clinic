@@ -1,0 +1,115 @@
+{% extends "publicbase.html" %}
+{% block title %}{% endblock %}
+
+{% block content %}
+<section style="text-align:center">
+<h1 style="text-align:center">{{ clinic_info[0].get_name() }}'s Details</h1>
+    <hr>
+    <br>
+<div >
+    <div>
+        <h4><b>Area:</b> {{ clinic_info[0].get_area()}}</h4>
+    </div>
+    <div>
+        <h4><b>Postal Code & Unit Number:</b> Singapore {{ clinic_info[0].get_postal_code()}}, {{ clinic_info[0].get_unit()}}</h4>
+    </div>
+    <div>
+        <h4><b>Contact Number:</b> {{ clinic_info[0].get_phone()}}</h4>
+    </div>
+    <div>
+        <h4><b>Email:</b> <a href="mailto: {{clinic_info[0].get_email()}}">{{ clinic_info[0].get_email()}}</a></h4>
+    </div>
+    <hr>
+    <div>
+        <h4><b>Operating Hours:</b></h4>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Opening Time</th>
+        <th>Closing Time</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for day in clinic_info[1] %}
+        <tr>
+            <td>{{day}}</td>
+            {% if clinic_info[1][day][0] == None %}
+            <td>Off</td>
+            <td>Off</td>
+            {% else %}
+            <td>{{ clinic_info[1][day][0] }}</td>
+            <td>{{ clinic_info[1][day][1] }}</td>
+            {% endif %}
+        </tr>
+            {% endfor %}
+    </tbody>
+</table>
+    </div>
+    <hr>
+    <div>
+        <h4><b>Off Days:</b></h4>
+        <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Reason/Message (if any)</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for start in clinic_info[2] %}
+        <tr>
+            <td>{{clinic_info[2][start][0]}}</td>
+            <td>{{clinic_info[2][start][1]}}</td>
+            <td>{{clinic_info[2][start][2]}}</td>
+        </tr>
+            {% endfor %}
+    </tbody>
+</table>
+    </div>
+    <div>
+    <a href="/searchClinicOH" class="btn btn-primary">Back</a>
+    </div>
+</div>
+</section>
+<script>
+function sortTable() {
+  var table, rows, switchingAgain, i, a, b, shouldSwitchAgain;
+  table = document.getElementById("doctorscheduletable");
+  /* Make a loop that will continue until
+  no switching has been done: */
+
+  switchingAgain = true;
+  while (switchingAgain) {
+    // Start by saying: no switching is done:
+    switchingAgain = false;
+    rows = table.rows;
+    /* Loop through all table rows (except the
+    first, which contains table headers): */
+    for (i = 1; i < (rows.length - 1); i++) {
+      // Start by saying there should be no switching:
+      shouldSwitchAgain = false;
+      /* Get the two elements you want to compare,
+      one from current row and one from the next: */
+      a = rows[i].getElementsByTagName("td")[0];
+      b = rows[i + 1].getElementsByTagName("td")[0];
+      // Check if the two rows should switch place:
+        if (x.innerHTML == y.innerHTML) {
+       if (a.innerHTML > b.innerHTML) {
+        // If so, mark as a switch and break the loop:
+        shouldSwitchAgain = true;
+        break;
+       }
+      }
+      }
+    if (shouldSwitchAgain) {
+      /* If a switch has been marked, make the switch
+      and mark that a switch has been done: */
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switchingAgain = true;
+    }
+  }
+}
+</script>
+{% endblock %}

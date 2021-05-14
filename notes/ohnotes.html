@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Retrieve Users{% endblock %}
+
+{% block content %}
+<section style="text-align:center">
+<h1>Retrieve Operating Hours</h1>
+
+    <hr>
+    <br>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Opening Time</th>
+        <th>Closing Time</th>
+        <th><a href="/editOperatingHour" class="btn btn-warning">Update</a></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for day in operating_hour_dict %}
+      <tr>
+        {% if day == "Mon" %}
+        <td>Monday</td>
+        {% elif day == "Tues" %}
+        <td>Tuesday</td>
+        {% elif day == "Wed" %}
+        <td>Wednesday</td>
+        {% elif day == "Thur" %}
+        <td>Thursday</td>
+        {% elif day == "Fri" %}
+        <td>Friday</td>
+        {% elif day == "Sat" %}
+        <td>Saturday</td>
+        {% elif day == "Sun" %}
+        <td>Sunday</td>
+        {% endif %}
+        {% if operating_hour_dict[day][0] == None %}
+        <td>Off</td>
+        {% elif operating_hour_dict[day][0] == None %}
+        <td>Off</td>
+        {% elif operating_hour_dict[day][0] != None %}
+        <td>{{ operating_hour_dict[day][0] }}</td>
+        {% endif %}
+        {% if operating_hour_dict[day][1] == None %}
+        <td>Off</td>
+        {% elif operating_hour_dict[day][1] == None %}
+        <td>Off</td>
+        {% elif operating_hour_dict[day][1] != None %}
+        <td>{{ operating_hour_dict[day][1] }}</td>
+        {% endif %}
+        <td><a href="/updateOperatingHour/{{ day }}" class="btn btn-warning">Update</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</section>
+{% endblock %}

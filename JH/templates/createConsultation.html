@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+{% block title %}Book an Online Consultation{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<head>
+    <style>
+        .form-control {
+          border-radius: 0;
+          box-shadow: none;
+          font-size: 14px;
+          margin: 10px !important;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          width: 30% !important;
+        }
+
+        #overlay, #overlay1 {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          padding-top: 100px;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgb(0, 0, 0);
+          background-color: rgba(0, 0, 0, 0.4);
+          filter: alpha(opacity=50);
+        }
+
+        #modal, #modal1 {
+          background-color: #fefefe;
+          margin: auto;
+          padding: 20px;
+          border-radius: 14px;
+          border: 1px solid #888;
+          width: 80%;
+        }
+
+        .close, .close1 {
+          color: #aaaaaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus,
+        .close1:hover,
+        .close1:focus {
+          color: #000;
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .symptomCheckbox {
+          margin-top: 10px;
+          margin-bottom: 10px;
+          display: inline-block;
+          text-align: center;
+        }
+
+        #content {
+          font-size: 150%;
+        }
+
+        table.consultation td {
+          width: auto;
+        }
+
+        table.consultation th {
+          width: auto;
+        }
+
+        table.symptomsList td {
+          width: 400px;
+          text-align: left;
+        }
+
+        tr.border_top td {
+          border-top: 1px solid black;
+        }
+
+        tr.border_bottom td {
+          border-bottom: 1px solid black;
+        }
+
+        tr.border_top,
+        tr.border_bottom {
+          border-left: 1px solid black;
+          border-right: 1px solid black;
+        }
+
+        .form-consult {
+            border-radius: 0;
+            box-shadow: none;
+            font-size: 14px;
+            padding: 10px !important;
+            width: 60%;
+        }
+    </style>
+    <script>
+        function listClinics(){
+        var location = document.getElementById('location').value;
+        var clinicsList = document.getElementById("listofclinics").innerHTML;
+        clinicsList = clinicsList.slice(1, clinicsList.length-1);
+        clinicsList = clinicsList.split(']');
+        copy = clinicsList;
+
+        dict = {};
+        var i = 0;
+        while(i<clinicsList.length-1){
+          var newList = clinicsList[i].split("'");
+          var a = 3;
+          array = [];
+          while(a<newList.length-1){
+            if(a%2==1){
+              array.push(newList[a]);
+            }
+            a++;
+          }
+          dict[newList[1]] = array;
+          i++;
+        }
+
+        if(location in dict){
+        var b = 0;
+        var selectTag = document.createElement("select");
+        selectTag.classList.add("form-consult");
+        selectTag.id = "clinic";
+        selectTag.name = "clinic";
+          while(b<dict[location].length){
+            var optionTag = document.createElement("option");
+            optionTag.value = dict[location][b];
+            var node = document.createTextNode(dict[location][b]);
+            optionTag.appendChild(node);
+            selectTag.appendChild(optionTag);
+            b++;
+          }
+        }
+
+        else {
+            var selectTag = document.createElement("select");
+            selectTag.classList.add("form-consult");
+            selectTag.id = "clinic";
+            selectTag.name = "clinic";
+            var optionTag = document.createElement("option");
+            optionTag.value = "None";
+            var node = document.createTextNode("Select Location");
+            optionTag.appendChild(node);
+            selectTag.appendChild(optionTag);
+        }
+        document.getElementById('changeClinics').innerHTML = "";
+        document.getElementById('changeClinics').appendChild(selectTag);
+        }
+
+        function confirmSymptoms() {
+            var symptoms = ""
+
+            if(document.getElementById('headache').checked) {
+              symptoms += document.getElementById('headache').value + ", ";
+            }
+            if(document.getElementById('rashes').checked) {
+              symptoms += document.getElementById('rashes').value + ", ";
+            }
+            if(document.getElementById('runnynose').checked) {
+              symptoms += document.getElementById('runnynose').value + ", ";
+            }
+            if(document.getElementById('itchiness').checked) {
+              symptoms += document.getElementById('itchiness').value + ", ";
+            }
+            if(document.getElementById('musclepain').checked) {
+              symptoms += document.getElementById('musclepain').value + ", ";
+            }
+            if(document.getElementById('sorethroat').checked) {
+              symptoms += document.getElementById('sorethroat').value + ", ";
+            }
+            if(document.getElementById('cough').checked) {
+              symptoms += document.getElementById('cough').value + ", ";
+            }if(document.getElementById('diarrhea').checked) {
+              symptoms += document.getElementById('diarrhea').value + ", ";
+            }
+            if(document.getElementById('others').value.length != 0) {
+              symptoms += document.getElementById('others').value + ", ";
+            }
+
+            symptoms = symptoms.slice(0, symptoms.length-2);
+
+            document.getElementById("symptoms").value = symptoms;
+        }
+
+        function isLetter(char) {
+            return (/[a-zA-Z]/).test(char);
+        }
+
+        function nricCheck() {
+            var nric = document.getElementById("nric");
+            if (nric.value.length == 9) {
+                if (isLetter(nric.value[0]) && isLetter(nric.value[nric.value.length-1])){
+                    if (!isNaN(nric.value.slice(1, nric.value.length-1))) {
+                        nric.setCustomValidity("");
+                        return;
+                    }
+                }
+            }
+            nric.setCustomValidity("Enter a valid NRIC");
+        }
+    </script>
+</head>
+<body style="overflow:scroll;height:auto;">
+<div style="display:none;" id="listofclinics">{{ clinicsList }}</div>
+<div style="display:none">{{ render_field(form.date) }}{{ render_field(form.symptoms) }}</div>
+<div id="listClinics"></div>
+<section style="height:auto;" id="hero" class="d-flex align-items-center">
+<div>
+    <h1>Online Consultation</h1>
+
+    <fieldset style="background-color: white; width: 45%;">
+
+    <form method="POST" action="">
+        <table style="text-align:left;" class="consultation">
+              <tr>
+                  <th colspan="2"><h2>Choose a Clinic</h2></th>
+              </tr>
+              <tr>
+                  <th>Search a clinic</th>
+                  <td>{{ render_field(form.searchClinic, class="form-consult") }} <button style="border-radius:100%">&#128269;</button></td>
+              </tr>
+              <tr>
+                  <th>Location</th>
+                  <td>{{ render_field(form.location, class="form-consult", onchange="listClinics()") }}</td>
+              </tr>
+              <tr>
+                  <th>Clinic</th>
+                  <td>
+                      <div class="form-group" id="changeClinics">
+                        {{ render_field(form.clinic, class="form-consult") }}
+                      </div>
+                  </td>
+              </tr>
+              <tr>
+                  <th>Fullname</th>
+                  <td>{{ render_field(form.fullname, class="form-consult") }}</td>
+              </tr>
+              <tr>
+                  <th>NRIC</th>
+                  <td>{{ render_field(form.nric, class="form-consult") }}</td>
+              </tr>
+              <tr>
+                  <th colspan="2"><h2>Schedule Consultation</h2></th>
+              </tr>
+              <tr>
+                  <td style="width:120px;">
+                      <div id="flight">
+                        <input id="selectDate" type="date" name="arrival" required/>
+                      </div>
+                  </td>
+              </tr>
+              <tr>
+                  <th>Choose a timing</th>
+              </tr>
+              <tr>
+                  <td colspan="2">{{ render_field(form.timing, style="list-style-type:none;font-size:15px;") }}</td>
+              </tr>
+        </table>
+        <br>
+
+        <div>
+            <table class="symptomsList" style="border-collapse:collapse;">
+                <tr>
+                    <th colspan="2" style="text-align:left;padding-top:10px;">Select your symptoms</th>
+                </tr>
+                <tr class="border_top">
+                    <td><input type="checkbox" value="headache" id="headache" name="symptoms" class="symptomCheckbox">Headache</td>
+                    <td><input type="checkbox" value="rashes" id="rashes" name="symptoms" class="symptomCheckbox">Rashes</td>
+                    <td><input type="checkbox" value="runnynose" id="runnynose" name="symptoms" class="symptomCheckbox">Runny Nose</td>
+                    <td><input type="checkbox" name="symptoms" value="itchiness" id="itchiness" class="symptomCheckbox">Itchiness<br></td>
+                </tr>
+                <tr style="border-right:1px solid black;border-left:1px solid black;">
+                    <td><input type="checkbox" name="symptoms" value="musclepain" id="musclepain" class="symptomCheckbox">Muscle Pain</td>
+                    <td><input type="checkbox" name="symptoms" value="sorethroat" id="sorethroat" class="symptomCheckbox">Sore Throat</td>
+                    <td><input type="checkbox" name="symptoms" value="cough" id="cough" class="symptomCheckbox">Coughing</td>
+                    <td><input type="checkbox" name="symptoms" value="diarrhea" id="diarrhea" class="symptomCheckbox">Diarrhea</td>
+                </tr>
+                <tr class="border_bottom">
+                    <td colspan="4" style="padding-bottom:5px;"><label for="others">Others: </label><input id="others" type="text"/></td>
+                </tr>
+            </table>
+        </div>
+
+        <div>
+            <br>
+            Additional Notes<br>
+            <span style="position:relative;left:-10px;">{{ render_field(form.notes, class="form-control") }}</span>
+        </div>
+        <div class="appointment">
+            <div class="php-email-form">
+                <button style="float:right;" type="submit" value="submit" onclick="confirmSymptoms(), nricCheck()">Submit</button>
+            </div>
+        </div>
+    </form>
+    </fieldset>
+</div>
+</section>
+</body>
+
+<script>
+    var modal = document.getElementById("overlay");
+    var modal1 = document.getElementById("overlay1");
+
+    var btn = document.getElementById("listSymptoms");
+    var btn1 = document.getElementById("listTimings");
+
+    var span1 = document.getElementsByClassName("close")[0];
+    var span2 = document.getElementsByClassName("close")[1];
+
+    var span3 = document.getElementsByClassName("close1")[0];
+    var span4 = document.getElementsByClassName("close1")[1];
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    btn1.onclick = function() {
+      modal1.style.display = "block";
+    }
+
+    span1.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    span2.onclick = function() {
+      modal.style.display = "none";
+    }
+
+<!--    span3.onclick = function() {-->
+<!--      modal1.style.display = "none";-->
+<!--    }-->
+<!--    span4.onclick = function() {-->
+<!--      document.getElementById("date").value = document.getElementById("selectDate").value;-->
+<!--      modal1.style.display = "none";-->
+<!--    }-->
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+<!--    window.onclick = function(event) {-->
+<!--      if (event.target == modal1) {-->
+<!--        modal1.style.display = "none";-->
+<!--      }-->
+<!--    }-->
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Operating Hours{% endblock %}
+
+{% block content %}
+<section style="text-align:center">
+<h1>Retrieve Appointments</h1>
+
+    <hr>
+    <br>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Venue</th>
+        <th>Reason</th>
+        <th><a href="/" class="btn btn-warning">Add</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>(26/01/2021)</td>
+        <td>(6.00pm)</td>
+        <td>JD Clinic</td>
+        <td>Check Up</td>
+
+        <td><a href="/" class="btn btn-warning">View</a></td>
+        <td><a href="/" class="btn btn-warning">Update</a></td>
+        <td><a href="/" class="btn btn-danger">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</section>
+{% endblock %}

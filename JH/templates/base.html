@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{% block head %}
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <!-- Template Main CSS File -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/style.css') }}">
+</head>
+{% endblock %}
+<body>
+    {% block navbar %}
+        {% include 'includes/_navbar.html' %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block scripts %}
+    <!--Bootstrap JS-->
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+    {% endblock %}
+</body>
+</html>
